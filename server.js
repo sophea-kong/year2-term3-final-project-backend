@@ -2,6 +2,7 @@ const express = require('express');
 const { logger } = require('./middleware/logger');
 const { route } = require('./routes/userRoutes');
 const { bookingroute } = require('./routes/bookingRoutes');
+const { authRoute } = require('./routes/auth.js');
 
 const app = express()
 
@@ -13,6 +14,7 @@ app.get('/', (req, res) => {
 
 
 
+app.use('/auth', authRoute);
 app.use("/users",route);
 app.use('/booking',bookingroute);
 
