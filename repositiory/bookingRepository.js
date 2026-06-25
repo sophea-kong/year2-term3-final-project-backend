@@ -1,6 +1,6 @@
-import { pool } from "../db/database.js";
+import { Booking } from "../models/index.js";
 
 export async function getAllBookings() {
-    let [result] = await pool.query(`select * from booking;`);
-    return result;
+    const bookings = await Booking.findAll();
+    return bookings.map(b => b.toJSON());
 }
