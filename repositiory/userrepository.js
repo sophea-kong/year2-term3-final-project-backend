@@ -1,5 +1,4 @@
 import { User, Booking, DigitalTicket, Notification } from "../models/index.js";
-import { sequelize } from "../db/database.js";
 
 export async function getAllUsers(){
     const users = await User.findAll();
@@ -7,39 +6,38 @@ export async function getAllUsers(){
 }
 
 export async function getUserByid(id){
-    const user = await User.findOne({ where: { userid: id } });
+    const user = await User.findOne({ where: { userId: id } });
     return user ? user.toJSON() : undefined;
 }
 
 export async function editUserRepo(id,name,email){
-    await User.update({ fullname: name, email }, { where: { userid: id } });
+    await User.update({ fullName: name, email }, { where: { userId: id } });
     return 1;
 }
 
 export async function banUserRepo(id){
-    await User.update({ status: "banned" }, { where: { userid: id } });
+    await User.update({ status: "banned" }, { where: { userId: id } });
     return 1;
 }
 
 export async function unbanUserRepo(id){
-    await User.update({ status: "active" }, { where: { userid: id } });
+    await User.update({ status: "active" }, { where: { userId: id } });
     return 1;
 }
 
 export async function getBookingbyuserRepo(id){
     const bookings = await Booking.findAll({
-        where: { userid: id },
+        where: { userId: id },
         include: [{ model: User, required: true }]
     });
     
     if(bookings.length === 0){
         return 0;
     } else {
-        // Flatten the object to match previous SQL join behavior
         return bookings.map(b => {
             const data = b.toJSON();
-            const { user, ...bookingData } = data;
-            return { ...user, ...bookingData };
+            const { User: userObj, ...bookingData } = data;
+            return { ...userObj, ...bookingData };
         });
     }
 }
@@ -49,7 +47,7 @@ export async function getTicketsbyUserRepo(id) {
         include: [{
             model: Booking,
             required: true,
-            where: { userid: id },
+            where: { userId: id },
             include: [{ model: User, required: true }]
         }]
     });
@@ -60,10 +58,10 @@ export async function getTicketsbyUserRepo(id) {
         return tickets.map(t => {
             const data = t.toJSON();
             return {
-                ticketid: data.ticketid,
-                bookingid: data.bookingid,
+                ticketId: data.ticketId,
+                bookingId: data.bookingId,
                 ticketCode: data.ticketCode,
-                qrcode: data.qrcode,
+                qrCode: data.qrCode,
                 status: data.status,
                 generatedAt: data.generatedAt
             };
@@ -73,7 +71,7 @@ export async function getTicketsbyUserRepo(id) {
 
 export async function getNotificationByUserRepo(id){
     const notifications = await Notification.findAll({
-        where: { userid: id },
+        where: { userId: id },
         include: [{ model: User, required: true }]
     });
     
@@ -82,8 +80,8 @@ export async function getNotificationByUserRepo(id){
     } else {
         return notifications.map(n => {
             const data = n.toJSON();
-            const { user, ...notifData } = data;
-            return { ...user, ...notifData };
+            const { User: userObj, ...notifData } = data;
+            return { ...userObj, ...notifData };
         });
     }
 }

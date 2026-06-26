@@ -2,12 +2,12 @@ import { User } from "../models/index.js";
 
 export async function createUserRepo(fullname, email, passwordHash) {
     const user = await User.create({
-        fullname,
+        fullName: fullname,
         email,
         password: passwordHash,
         status: 'active'
     });
-    return user.userid;
+    return user.userId;
 }
 
 export async function getUserByEmailRepo(email) {
@@ -16,6 +16,6 @@ export async function getUserByEmailRepo(email) {
 }
 
 export async function updatePasswordRepo(userId, newPasswordHash) {
-    await User.update({ password: newPasswordHash }, { where: { userid: userId } });
+    await User.update({ password: newPasswordHash }, { where: { userId } });
     return 1;
 }

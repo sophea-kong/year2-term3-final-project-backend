@@ -48,8 +48,8 @@ export async function login(req, res) {
             return res.status(401).json({ error: "Invalid credentials" });
         }
         
-        const id = user.userid || user.userId || user.id;
-        const token = jwt.sign({ userid: id, email: user.email }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+        const id = user.userId || user.id;
+        const token = jwt.sign({ userId: id, email: user.email }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
         return res.json({ message: "Login successful", token });
     } catch (err) {
         console.error(err);
@@ -64,7 +64,7 @@ export async function logout(req, res) {
 
 export async function getMe(req, res) {
     try {
-        const user = await getUserByid(req.user.userid);
+        const user = await getUserByid(req.user.userId);
         if (!user) return res.status(404).json({ error: "User not found" });
         
         const { password, ...userData } = user;
@@ -81,7 +81,7 @@ export async function updateMe(req, res) {
         if (!fullname || !email) {
             return res.status(400).json({ error: "Missing required fields" });
         }
-        const result = await editUserRepo(req.user.userid, fullname, email);
+        const result = await editUserRepo(req.user.userId, fullname, email);
         if (result === 1) {
             return res.json({ message: "Profile updated successfully" });
         } else {
@@ -101,7 +101,7 @@ export async function forgotPassword(req, res) {
             return res.status(404).json({ error: "User not found" });
         }
         // Create a temporary reset token
-        const resetToken = jwt.sign({ userid: user.userid }, JWT_SECRET, { expiresIn: '15m' });
+        const resetToken = jwt.sign({ userId: user.userId }, JWT_SECRET, { expiresIn: '15m' });
         // In real app, send an email with reset token link
         return res.json({ message: "Password reset link generated", resetToken });
     } catch (err) {
@@ -125,7 +125,7 @@ export async function resetPassword(req, res) {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(newPassword, salt);
         
-        await updatePasswordRepo(payload.userid, hashedPassword);
+        await updatePasswordRepo(payload.userId, hashedPassword);
         return res.json({ message: "Password reset successfully" });
     } catch (err) {
         console.error(err);
