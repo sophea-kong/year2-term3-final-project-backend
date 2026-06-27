@@ -4,6 +4,7 @@ import { route } from './routes/userRoutes.js';
 import { bookingroute } from './routes/bookingRoutes.js';
 import { authRoute } from './routes/auth.js';
 import { roomRoute } from './routes/roomRoutes.js';
+import { scheduleRoute } from './routes/schedule.routes.js';
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use('/auth', authRoute);
 app.use("/users", route);
 app.use('/booking', bookingroute);
 app.use('/rooms', roomRoute);
+app.use('/schedules', scheduleRoute);
 
 app.listen(3000, () => {
     console.log("listening on port 3000");
