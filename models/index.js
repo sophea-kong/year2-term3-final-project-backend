@@ -31,7 +31,7 @@ export const Booking = sequelize.define('Booking', {
   participantCount: { type: DataTypes.INTEGER, defaultValue: 1 },
   startTime: { type: DataTypes.DATE, allowNull: false },
   endTime: { type: DataTypes.DATE, allowNull: false },
-  status: { type: DataTypes.ENUM('pending', 'approved', 'rejected', 'cancelled'), defaultValue: 'pending' },
+  status: { type: DataTypes.ENUM('pending', 'approved', 'rejected', 'cancelled', 'completed', 'no-show', 'rescheduled'), defaultValue: 'pending' },
   rejectionReason: { type: DataTypes.TEXT, allowNull: true }
 }, { tableName: 'BOOKING', timestamps: false });
 
