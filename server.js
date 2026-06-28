@@ -5,10 +5,13 @@ import { bookingroute } from './routes/bookingRoutes.js';
 import { authRoute } from './routes/auth.js';
 import { roomRoute } from './routes/roomRoutes.js';
 import { scheduleRoute } from './routes/schedule.routes.js';
+import { ticketRoute } from './routes/ticket.routes.js';
+import cors from 'cors';
 
 const app = express();
 
 app.use(logger);
+app.use(cors())
 
 app.get('/', (req, res) => {
     res.send("test");
@@ -19,6 +22,7 @@ app.use("/users", route);
 app.use('/booking', bookingroute);
 app.use('/rooms', roomRoute);
 app.use('/schedules', scheduleRoute);
+app.use('/', ticketRoute);
 
 app.listen(3000, () => {
     console.log("listening on port 3000");

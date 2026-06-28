@@ -39,7 +39,6 @@ export async function checkConflictRepo(roomId, startTime, endTime, excludeSched
     const start = new Date(startTime);
     const end = new Date(endTime);
 
-    // Overlap condition: (s.startTime < end) AND (s.endTime > start)
     const scheduleWhere = {
         roomId,
         startTime: { [Op.lt]: end },
@@ -54,7 +53,6 @@ export async function checkConflictRepo(roomId, startTime, endTime, excludeSched
         where: scheduleWhere
     });
 
-    // Also check active bookings (status not rejected and not cancelled)
     const conflictingBookings = await Booking.findAll({
         where: {
             roomId,
