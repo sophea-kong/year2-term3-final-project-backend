@@ -1,29 +1,29 @@
 import jwt from "jsonwebtoken";
 
-// export function authenticateToken(req, res, next) {
-//     const authHeader = req.headers['authorization'];
-//     console.log(authHeader);
-//     let token = authHeader;
-//     if (authHeader && authHeader.startsWith('Bearer ')) {
-//         token = authHeader.split(' ')[1];
-//     }
+export function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    console.log(authHeader);
+    let token = authHeader;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.split(' ')[1];
+    }
     
-//     if (!token) return res.status(401).json({ error: "Access denied. No token provided." });
+    if (!token) return res.status(401).json({ error: "Access denied. No token provided." });
 
-//     jwt.verify(token, process.env.JWT_SECRET || 'secret_key', (err, user) => {
-//         if (err) return res.status(403).json({ error: "Invalid token" });
-//         req.user = user;
-//         next();
-//     });
-// }
+    jwt.verify(token, process.env.JWT_SECRET || 'secret_key', (err, user) => {
+        if (err) return res.status(403).json({ error: "Invalid token" });
+        req.user = user;
+        next();
+    });
+}
 
 
 // for testing send jwt payload in req.user instead of verifying token
-export function authenticateToken(req, res, next) {
-    req.user = {
-        id: 2,
-        role: "user"
-    };
+// export function authenticateToken(req, res, next) {
+//     req.user = {
+//         id: 2,
+//         role: "user"
+//     };
 
-    next();
-}
+//     next();
+// }
