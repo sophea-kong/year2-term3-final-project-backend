@@ -107,6 +107,12 @@ export const Schedule = sequelize.define('Schedule', {
   type: { type: DataTypes.STRING(50), allowNull: false }
 }, { tableName: 'SCHEDULE', timestamps: false });
 
+export const RoomImage = sequelize.define('RoomImage', {
+  imageId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  roomId: { type: DataTypes.INTEGER, allowNull: false },
+  imageUrl: { type: DataTypes.STRING(255), allowNull: false }
+}, { tableName: 'ROOM_IMAGE', timestamps: false });
+
 // Define Relationships
 
 // User & Booking
@@ -116,6 +122,10 @@ Booking.belongsTo(User, { foreignKey: 'userId' });
 // Room & Booking
 Room.hasMany(Booking, { foreignKey: 'roomId' });
 Booking.belongsTo(Room, { foreignKey: 'roomId' });
+
+// Room & RoomImage
+Room.hasMany(RoomImage, { foreignKey: 'roomId', as: 'images', onDelete: 'CASCADE' });
+RoomImage.belongsTo(Room, { foreignKey: 'roomId' });
 
 // Booking & DigitalTicket
 Booking.hasOne(DigitalTicket, { foreignKey: 'bookingId' });
