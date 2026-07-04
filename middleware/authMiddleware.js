@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { getUserByid } from "../repositiory/userrepository.js";
 
 export function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
@@ -15,6 +16,17 @@ export function authenticateToken(req, res, next) {
         req.user = user;
         next();
     });
+}
+
+export async function authorizeAdmin(req, res, next) {
+    const user = await getUserByid(req.user.userId);
+    if (user.userId && user.role == 'admin') {
+        next();
+    } else {
+        console.log(user);
+        console.log(user.role);
+        return res.status(403).json({ error: "Access denied. Admin role required." });
+    }
 }
 
 

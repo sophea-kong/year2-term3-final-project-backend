@@ -1,4 +1,6 @@
+import { Model } from "sequelize";
 import { Room, Schedule, Booking } from "../models/index.js";
+import { RoomImage } from "../models/index.js";
 
 export async function createRoomRepo(roomData) {
     const room = await Room.create(roomData);
@@ -6,7 +8,7 @@ export async function createRoomRepo(roomData) {
 }
 
 export async function getAllRoomsRepo() {
-    const rooms = await Room.findAll();
+    const rooms = await Room.findAll({include : [{model : RoomImage, require : true, as:"images"}]});
     return rooms.map(r => r.toJSON());
 }
 
@@ -43,4 +45,11 @@ export async function getRoomSchedulesRepo(id) {
 export async function getRoomBookingsRepo(id) {
     const bookings = await Booking.findAll({ where: { roomId: id } });
     return bookings.map(b => b.toJSON());
+}
+
+//Room Image
+export async function addRoomImageRepo(roomId, imageUrl){
+    return await RoomImage.create({
+        roomId, imageUrl
+    });
 }

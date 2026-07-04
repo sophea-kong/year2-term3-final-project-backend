@@ -19,3 +19,4 @@ export async function updatePasswordRepo(userId, newPasswordHash) {
     await User.update({ password: newPasswordHash }, { where: { userId } });
     return 1;
 }
+

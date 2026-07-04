@@ -7,17 +7,18 @@ import {
     cancelTicket,
     expireTicket
 } from "../controller/ticketController.js";
+import { authenticateToken, authorizeAdmin } from "../middleware/authMiddleware.js";
 
 const ticketRoute = express.Router();
 ticketRoute.use(express.json());
 
-ticketRoute.get('/tickets', getAllTickets);
-ticketRoute.post('/tickets/verify', verifyTicketCode);
-ticketRoute.get('/tickets/:ticketId', getTicketById);
-ticketRoute.patch('/tickets/:ticketId/cancel', cancelTicket);
-ticketRoute.patch('/tickets/:ticketId/expire', expireTicket);
+ticketRoute.get('/tickets', authenticateToken, authorizeAdmin, getAllTickets);
+ticketRoute.post('/tickets/verify', authenticateToken, authorizeAdmin, verifyTicketCode);
+ticketRoute.get('/tickets/:ticketId', authenticateToken, getTicketById);
+ticketRoute.patch('/tickets/:ticketId/cancel', authenticateToken, authorizeAdmin, cancelTicket);
+ticketRoute.patch('/tickets/:ticketId/expire', authenticateToken, authorizeAdmin, expireTicket);
 
 // Bookings integration endpoint
-ticketRoute.get('/bookings/:bookingId/ticket', getTicketByBookingId);
+ticketRoute.get('/bookings/:bookingId/ticket', authenticateToken, getTicketByBookingId);
 
 export { ticketRoute };

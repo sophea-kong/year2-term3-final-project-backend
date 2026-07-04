@@ -7,8 +7,10 @@ import {
     updateRoomStatusRepo,
     getAvailableRoomsRepo,
     getRoomSchedulesRepo,
-    getRoomBookingsRepo
+    getRoomBookingsRepo,
+    addRoomImageRepo
 } from "../repositiory/roomRepository.js";
+import { uploadToCloudinary } from "../utils/cloudinary.js";
 
 export async function createRoom(req, res) {
     try {
@@ -119,5 +121,28 @@ export async function getRoomBookings(req, res) {
     } catch (err) {
         console.error(err);
         return res.status(500).send({ error: err.message });
+    }
+}
+
+//RoomImage
+export async function uploadRoomImage(req,res) {
+    try{
+        const {room_id} = req.params;
+        const room = await getRoomByIdRepo(room_id);
+        if(!room) {
+            return res.status(404).json({error : "Room not found."});
+        }
+        if(!req.file){
+            return res.status(400).json({error : "No images"});
+        }
+        const uploadResult = await uploadToCloudinary(req.file.buffer);
+        const roomImage = await addRoomImageRepo(room_id, uploadResult.secure_url);
+        return res.status(201).json({
+            message : "image uploaded successfully",
+            data : roomImage
+        })
+    } catch (err){
+        console.log(err);
+        return res.status(500).json({error : err.message});
     }
 }
