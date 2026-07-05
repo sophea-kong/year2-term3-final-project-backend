@@ -10,9 +10,10 @@ import {
 	cancelBooking,
 	completeBooking,
 	noShowBooking,
-	rescheduleBookingHandler
+	rescheduleBookingHandler,
+	pendingBooking
 } from "../controller/bookingController.js";
-import { authenticateToken } from "../middleware/authMiddleware.js";
+import { authenticateToken, authorizeAdmin } from "../middleware/authMiddleware.js";
 
 const bookingroute = express.Router();
 bookingroute.use(express.json());
@@ -20,6 +21,7 @@ bookingroute.use(express.json());
 bookingroute.post('/', authenticateToken, (req, res) => createNewBooking(req, res));
 bookingroute.get('/', authenticateToken, (req, res) => getAllBooking(req, res));
 bookingroute.get('/me', authenticateToken, (req, res) => getBookingsForUser(req, res));
+bookingroute.get('/pendings',authenticateToken,authorizeAdmin,(req,res) => pendingBooking(req,res))
 bookingroute.get('/:booking_id', authenticateToken, (req, res) => getBooking(req, res));
 bookingroute.put('/:booking_id', authenticateToken, (req, res) => putBooking(req, res));
 

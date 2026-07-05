@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import { Booking, Room } from "../models/index.js";
 
 // Helper to format booking: replaces or appends roomName
@@ -77,4 +78,16 @@ export async function rescheduleBooking(id, startTime, endTime) {
         where: { bookingId: id }
     });
     return getBookingById(id);
+}
+
+export async function pendingBookingRepo() {
+    const bookings = await Booking.findAll({
+        include: [{
+            model: Room,
+            attributes: ['roomName'],
+            required: false
+        }],
+        where : {status : 'pending'}
+    });
+    return bookings.map(formatBooking);
 }

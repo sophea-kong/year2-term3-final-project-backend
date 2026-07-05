@@ -5,7 +5,8 @@ import {
     updateBooking,
     getBookingsByUser,
     setBookingStatus,
-    rescheduleBooking
+    rescheduleBooking,
+    pendingBookingRepo
 } from "../repositiory/bookingRepository.js";
 
 function extractUserId(req) {
@@ -184,6 +185,16 @@ export async function rescheduleBookingHandler(req, res) {
         if (!startTime || !endTime) return res.status(400).json({ error: 'Missing new startTime or endTime' });
         const updated = await rescheduleBooking(booking_id, startTime, endTime);
         return res.json(updated);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+export async function pendingBooking(req,res) {
+    try{
+        const result = await pendingBookingRepo();
+        return res.json(result);
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: 'Internal server error' });
