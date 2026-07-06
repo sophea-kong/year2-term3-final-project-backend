@@ -9,6 +9,8 @@ import {
     pendingBookingRepo
 } from "../repositiory/bookingRepository.js";
 
+import { createTicketRepo } from "../repositiory/ticketRepository.js";
+
 function extractUserId(req) {
     return req.user?.user_id || req.user?.userId || req.user?.id || null;
 }
@@ -100,6 +102,8 @@ export async function approveBooking(req, res) {
             return res.status(403).json({ error: 'Forbidden' });
         }
         const updated = await setBookingStatus(booking_id, 'approved');
+        await createTicketRepo(updated);
+
         return res.json(updated);
     } catch (err) {
         console.error(err);

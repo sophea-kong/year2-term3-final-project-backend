@@ -1,4 +1,9 @@
+import { randomBytes } from "crypto";
 import { DigitalTicket, Booking, User, Room } from "../models/index.js";
+
+function buildTicketCode(bookingId) {
+    return `TICKET-${bookingId}-${randomBytes(8).toString('hex')}`;
+}
 
 export async function getAllTicketsRepo() {
     const tickets = await DigitalTicket.findAll({
@@ -64,4 +69,22 @@ export async function updateTicketStatusRepo(id, status) {
         where: { ticketId: id }
     });
     return affectedCount;
+}
+
+export async function createTicketRepo(booking) {
+    const existingTicket = await getTicketByBookingIdRepo(booking.bookingId);
+    if (existingTicket) {
+        return existingTicket;
+    }
+
+    const ticketCode = buildTicketCode(booking.bookingId);
+
+    const ticket = await DigitalTicket.create({
+        bookingId: booking.bookingId,
+        ticketCode,
+        qrCode: ticketCode,
+        status: 'valid'
+    });
+
+    return ticket.toJSON();
 }
