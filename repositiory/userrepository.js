@@ -28,8 +28,11 @@ export async function unbanUserRepo(id){
 export async function getBookingbyuserRepo(id){
     const bookings = await Booking.findAll({
         where: { userId: id },
-        include: [{ model: User, required: true}],
-        include : [{model : Room, required:true}]
+        include: [
+            { model: User, required: true},
+            { model: Room, required: true }
+        ],
+        // include : [{model : Room, required:true}]
     });
     
     if(bookings.length === 0){
