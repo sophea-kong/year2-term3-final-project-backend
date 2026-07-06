@@ -8,7 +8,7 @@ export async function createRoomRepo(roomData) {
 }
 
 export async function getAllRoomsRepo() {
-    const rooms = await Room.findAll({include : [{model : RoomImage, require : true, as:"images"}]});
+    const rooms = await Room.findAll({include : [{model : RoomImage, required : true, as:"images"}]});
     return rooms.map(r => r.toJSON());
 }
 
