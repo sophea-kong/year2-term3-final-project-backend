@@ -4,7 +4,7 @@ import { getUserByid } from "../repositiory/userrepository.js";
 export function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     console.log(authHeader);
-    let token = authHeader;
+    let token = authHeader || req.query.token;
     if (authHeader && authHeader.startsWith('Bearer ')) {
         token = authHeader.split(' ')[1];
     }

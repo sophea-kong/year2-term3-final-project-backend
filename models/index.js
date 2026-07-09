@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { DatabaseError, DataTypes } from 'sequelize';
 import { sequelize } from '../db/database.js';
 
 export const User = sequelize.define('User', {
@@ -8,7 +8,10 @@ export const User = sequelize.define('User', {
   password: { type: DataTypes.STRING(255), allowNull: false },
   role: { type: DataTypes.ENUM('admin', 'user'), defaultValue: 'user' },
   status: { type: DataTypes.ENUM('active', 'inactive', 'banned'), defaultValue: 'active' },
-  department: { type: DataTypes.STRING(100), allowNull: true }
+  department: { type: DataTypes.STRING(100), allowNull: true },
+  googleAccessToken : {type : DataTypes.TEXT,allowNull: true},
+  googleRefreshToken : { type : DataTypes.TEXT,allowNull:true},
+  googleTokenExpiry  : { type :DataTypes.BIGINT, allowNull:true}
 }, { tableName: 'USER', timestamps: false });
 
 export const Room = sequelize.define('Room', {
@@ -32,7 +35,8 @@ export const Booking = sequelize.define('Booking', {
   startTime: { type: DataTypes.DATE, allowNull: false },
   endTime: { type: DataTypes.DATE, allowNull: false },
   status: { type: DataTypes.ENUM('pending', 'approved', 'rejected', 'cancelled', 'completed', 'no-show', 'rescheduled'), defaultValue: 'pending' },
-  rejectionReason: { type: DataTypes.TEXT, allowNull: true }
+  rejectionReason: { type: DataTypes.TEXT, allowNull: true },
+  googleEventId: { type: DataTypes.STRING(255), allowNull: true }
 }, { tableName: 'BOOKING', timestamps: false });
 
 export const DigitalTicket = sequelize.define('DigitalTicket', {

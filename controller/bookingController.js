@@ -8,6 +8,8 @@ import {
     rescheduleBooking,
     pendingBookingRepo
 } from "../repositiory/bookingRepository.js";
+import { getUserByid } from "../repositiory/userrepository.js";
+import { addEventToGoogleCalendar } from "../utils/googleCalendarService.js";
 
 function extractUserId(req) {
     return req.user?.user_id || req.user?.userId || req.user?.id || null;
@@ -96,10 +98,22 @@ export async function approveBooking(req, res) {
         if (!booking) return;
         // only admin can approve or the owner
         const userId = extractUserId(req);
-        if (req.user?.role !== 'admin' && booking.userId !== userId) {
+        const u = await getUserByid(req.user.userId);
+        if (u.role !== 'admin') {
             return res.status(403).json({ error: 'Forbidden' });
         }
         const updated = await setBookingStatus(booking_id, 'approved');
+        
+        // Fetch booking owner profile to check Google Calendar link
+        try {
+            const owner = await getUserByid(updated.userId);
+            if (owner && owner.googleRefreshToken) {
+                await addEventToGoogleCalendar(updated, owner);
+            }
+        } catch (calErr) {
+            console.error("Google Calendar sync failed:", calErr.message);
+        }
+
         return res.json(updated);
     } catch (err) {
         console.error(err);
@@ -113,7 +127,8 @@ export async function rejectBooking(req, res) {
         const { reason } = req.body;
         const booking = await ensureBookingExists(res, booking_id);
         if (!booking) return;
-        if (req.user?.role !== 'admin' && booking.userId !== extractUserId(req)) {
+        const u = await getUserByid(req.user.userId);
+        if (u.role !== 'admin') {
             return res.status(403).json({ error: 'Forbidden' });
         }
         const updated = await setBookingStatus(booking_id, 'rejected', { rejectionReason: reason });

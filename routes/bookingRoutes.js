@@ -25,11 +25,11 @@ bookingroute.get('/pendings',authenticateToken,authorizeAdmin,(req,res) => pendi
 bookingroute.get('/:booking_id', authenticateToken, (req, res) => getBooking(req, res));
 bookingroute.put('/:booking_id', authenticateToken, (req, res) => putBooking(req, res));
 
-bookingroute.patch('/:booking_id/approve', authenticateToken, (req, res) => approveBooking(req, res));
-bookingroute.patch('/:booking_id/reject', authenticateToken, (req, res) => rejectBooking(req, res));
+bookingroute.patch('/:booking_id/approve', authenticateToken,authorizeAdmin, (req, res) => approveBooking(req, res));
+bookingroute.patch('/:booking_id/reject', authenticateToken,authorizeAdmin, (req, res) => rejectBooking(req, res));
 bookingroute.patch('/:booking_id/cancel', authenticateToken, (req, res) => cancelBooking(req, res));
-bookingroute.patch('/:booking_id/complete', authenticateToken, (req, res) => completeBooking(req, res));
-bookingroute.patch('/:booking_id/no-show', authenticateToken, (req, res) => noShowBooking(req, res));
-bookingroute.patch('/:booking_id/reschedule', authenticateToken, (req, res) => rescheduleBookingHandler(req, res));
+bookingroute.patch('/:booking_id/complete', authenticateToken,authorizeAdmin, (req, res) => completeBooking(req, res));
+bookingroute.patch('/:booking_id/no-show', authenticateToken,authorizeAdmin, (req, res) => noShowBooking(req, res));
+bookingroute.patch('/:booking_id/reschedule', authenticateToken,authorizeAdmin, (req, res) => rescheduleBookingHandler(req, res));
 
 export { bookingroute }     

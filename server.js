@@ -8,6 +8,7 @@ import { roomRoute } from './routes/roomRoutes.js';
 import { scheduleRoute } from './routes/schedule.routes.js';
 import { ticketRoute } from './routes/ticket.routes.js';
 import cors from 'cors';
+import { sequelize } from './db/database.js';
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors())
 app.get('/', (req, res) => {
     res.send("test");
 });
+
 
 app.use('/auth', authRoute);
 app.use("/users", route);
