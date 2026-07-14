@@ -11,7 +11,8 @@ import {
 	completeBooking,
 	noShowBooking,
 	rescheduleBookingHandler,
-	pendingBooking
+	pendingBooking,
+	getAllApproved
 } from "../controller/bookingController.js";
 import { authenticateToken, authorizeAdmin } from "../middleware/authMiddleware.js";
 
@@ -22,6 +23,7 @@ bookingroute.post('/', authenticateToken, (req, res) => createNewBooking(req, re
 bookingroute.get('/', authenticateToken, (req, res) => getAllBooking(req, res));
 bookingroute.get('/me', authenticateToken, (req, res) => getBookingsForUser(req, res));
 bookingroute.get('/pendings',authenticateToken,authorizeAdmin,(req,res) => pendingBooking(req,res))
+bookingroute.get('/approved',authenticateToken,authorizeAdmin,(req,res) => getAllApproved(req,res));
 bookingroute.get('/:booking_id', authenticateToken, (req, res) => getBooking(req, res));
 bookingroute.put('/:booking_id', authenticateToken, (req, res) => putBooking(req, res));
 

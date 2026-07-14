@@ -6,7 +6,8 @@ import {
     getBookingsByUser,
     setBookingStatus,
     rescheduleBooking,
-    pendingBookingRepo
+    pendingBookingRepo,
+    getAllApprovedBookings
 } from "../repositiory/bookingRepository.js";
 import { getUserByid } from "../repositiory/userrepository.js";
 import { addEventToGoogleCalendar } from "../utils/googleCalendarService.js";
@@ -22,6 +23,16 @@ export async function getAllBooking(req, res) {
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+export async function getAllApproved(req,res) {
+    try{
+        const result = await getAllApprovedBookings();
+        return res.json(result);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error : "internal server error"});
     }
 }
 

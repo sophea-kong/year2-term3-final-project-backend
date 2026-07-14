@@ -21,6 +21,11 @@ export async function getAllBookings() {
     return bookings.map(formatBooking);
 }
 
+export async function getAllApprovedBookings() {
+    const bookings = await Booking.findAll( {where : { 'status' : "approved"},include : [{model:Room,attributes : ['roomName'],required:false}]});
+    return (bookings);
+}
+
 export async function createBooking(bookingData) {
     const booking = await Booking.create(bookingData);
     // Reload to get the roomName
