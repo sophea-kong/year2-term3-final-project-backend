@@ -11,6 +11,7 @@ import { creditRoute } from './routes/creditRoutes.js';
 import cors from 'cors';
 import { sequelize } from './db/database.js';
 import { setupCronJobs } from './utils/cronJobs.js';
+import chatRouter from './routes/chat.js';
 
 const app = express();
 
@@ -18,10 +19,9 @@ app.use(logger);
 app.use(cors())
 
 app.get('/', (req, res) => {
-    res.send("test");
+    res.status(200).send("test");
 });
 
-sequelize.sync({alter : true});
 
 app.use('/auth', authRoute);
 app.use("/users", route);
@@ -30,9 +30,14 @@ app.use('/rooms', roomRoute);
 app.use('/schedules', scheduleRoute);
 app.use('/credits', creditRoute);
 app.use('/', ticketRoute);
+app.use('/chat',chatRouter);
 
-setupCronJobs();
+if (process.env.NODE_ENV !== 'test') {
+    sequelize.sync();
+    setupCronJobs();
+    app.listen(3000, () => {
+        console.log("listening on port 3000");
+    });
+}
 
-app.listen(3000, () => {
-    console.log("listening on port 3000");
-});
+export default app;
