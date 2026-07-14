@@ -11,7 +11,8 @@ export const User = sequelize.define('User', {
   department: { type: DataTypes.STRING(100), allowNull: true },
   googleAccessToken : {type : DataTypes.TEXT,allowNull: true},
   googleRefreshToken : { type : DataTypes.TEXT,allowNull:true},
-  googleTokenExpiry  : { type :DataTypes.BIGINT, allowNull:true}
+  googleTokenExpiry  : { type :DataTypes.BIGINT, allowNull:true},
+  creditBalance: { type: DataTypes.INTEGER, defaultValue: 100 }
 }, { tableName: 'USER', timestamps: false });
 
 export const Room = sequelize.define('Room', {
@@ -117,6 +118,15 @@ export const RoomImage = sequelize.define('RoomImage', {
   imageUrl: { type: DataTypes.STRING(255), allowNull: false }
 }, { tableName: 'ROOM_IMAGE', timestamps: false });
 
+export const CreditTransaction = sequelize.define('CreditTransaction', {
+  transactionId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  userId: { type: DataTypes.INTEGER, allowNull: false },
+  amount: { type: DataTypes.INTEGER, allowNull: false },
+  type: { type: DataTypes.ENUM('addition', 'deduction'), allowNull: false },
+  reason: { type: DataTypes.STRING(255), allowNull: false },
+  createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
+}, { tableName: 'CREDIT_TRANSACTION', timestamps: false });
+
 // Define Relationships
 
 // User & Booking
@@ -166,3 +176,7 @@ MaintenanceRequest.belongsTo(Room, { foreignKey: 'roomId' });
 // Room & Schedule
 Room.hasMany(Schedule, { foreignKey: 'roomId' });
 Schedule.belongsTo(Room, { foreignKey: 'roomId' });
+
+// User & CreditTransaction
+User.hasMany(CreditTransaction, { foreignKey: 'userId' });
+CreditTransaction.belongsTo(User, { foreignKey: 'userId' });

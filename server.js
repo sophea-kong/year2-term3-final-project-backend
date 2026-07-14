@@ -7,8 +7,10 @@ import { authRoute } from './routes/auth.js';
 import { roomRoute } from './routes/roomRoutes.js';
 import { scheduleRoute } from './routes/schedule.routes.js';
 import { ticketRoute } from './routes/ticket.routes.js';
+import { creditRoute } from './routes/creditRoutes.js';
 import cors from 'cors';
 import { sequelize } from './db/database.js';
+import { setupCronJobs } from './utils/cronJobs.js';
 
 const app = express();
 
@@ -19,13 +21,17 @@ app.get('/', (req, res) => {
     res.send("test");
 });
 
+sequelize.sync({alter : true});
 
 app.use('/auth', authRoute);
 app.use("/users", route);
 app.use('/booking', bookingroute);
 app.use('/rooms', roomRoute);
 app.use('/schedules', scheduleRoute);
+app.use('/credits', creditRoute);
 app.use('/', ticketRoute);
+
+setupCronJobs();
 
 app.listen(3000, () => {
     console.log("listening on port 3000");
