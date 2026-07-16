@@ -24,7 +24,9 @@
     "multer": "^2.2.0",
     "mysql2": "^3.22.5",
     "node-cron": "^4.6.0",
-    "sequelize": "^6.37.8"
+    "sequelize": "^6.37.8",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "jest": "^30.4.2",

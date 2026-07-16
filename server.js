@@ -8,6 +8,8 @@ import { roomRoute } from './routes/roomRoutes.js';
 import { scheduleRoute } from './routes/schedule.routes.js';
 import { ticketRoute } from './routes/ticket.routes.js';
 import { creditRoute } from './routes/creditRoutes.js';
+import { maintenanceRoute } from './routes/maintenanceRoutes.js';
+import banRoute from './routes/banRoutes.js';
 import cors from 'cors';
 import { sequelize } from './db/database.js';
 import { setupCronJobs } from './utils/cronJobs.js';
@@ -17,7 +19,6 @@ const app = express();
 
 app.use(logger);
 app.use(cors())
-
 app.get('/', (req, res) => {
     res.status(200).send("test");
 });
@@ -31,6 +32,8 @@ app.use('/schedules', scheduleRoute);
 app.use('/credits', creditRoute);
 app.use('/', ticketRoute);
 app.use('/chat',chatRouter);
+app.use('/maintenance', maintenanceRoute);
+app.use('/bans', banRoute);
 
 if (process.env.NODE_ENV !== 'test') {
     sequelize.sync();

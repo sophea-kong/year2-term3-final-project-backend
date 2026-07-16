@@ -1,4 +1,4 @@
-import { User, Booking, DigitalTicket, Notification, Room } from "../models/index.js";
+import { User, Booking, DigitalTicket, Room, BanRecord } from "../models/index.js";
 
 export async function getAllUsers(){
     const users = await User.findAll();
@@ -15,13 +15,23 @@ export async function editUserRepo(id,name,email){
     return 1;
 }
 
-export async function banUserRepo(id){
+export async function banUserRepo(id, adminId, reason){
     await User.update({ status: "banned" }, { where: { userId: id } });
+    await BanRecord.create({
+        userId: id,
+        bannedBy: adminId,
+        reason: reason || "Violation of terms",
+        startDate: new Date()
+    });
     return 1;
 }
 
 export async function unbanUserRepo(id){
     await User.update({ status: "active" }, { where: { userId: id } });
+    await BanRecord.update(
+        { status: 'lifted', endDate: new Date() },
+        { where: { userId: id, status: 'active' } }
+    );
     return 1;
 }
 
@@ -66,23 +76,6 @@ export async function getTicketsbyUserRepo(id) {
                 status: data.status,
                 generatedAt: data.generatedAt
             };
-        });
-    }
-}
-
-export async function getNotificationByUserRepo(id){
-    const notifications = await Notification.findAll({
-        where: { userId: id },
-        include: [{ model: User, required: true }]
-    });
-    
-    if(notifications.length == 0){
-        return [];
-    } else {
-        return notifications.map(n => {
-            const data = n.toJSON();
-            const { User: userObj, ...notifData } = data;
-            return { ...userObj, ...notifData };
         });
     }
 }

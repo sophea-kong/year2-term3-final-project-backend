@@ -1,4 +1,4 @@
-import { banUser, editUser, getAllUsersContoller, getBookingbyUser, getNotificationByUser, getTicketsByuser, getUserByidController, unbanUser } from "../controller/userController.js";
+import { banUser, editUser, getAllUsersContoller, getBookingbyUser, getTicketsByuser, getUserByidController, unbanUser } from "../controller/userController.js";
 import express from "express";
 import { getUserByid } from "../repositiory/userrepository.js";
 import { authenticateToken, authorizeAdmin } from "../middleware/authMiddleware.js";
@@ -13,6 +13,6 @@ route.patch("/ban/:id", authenticateToken, authorizeAdmin, (req,res)=>banUser(re
 route.patch("/unban/:id", authenticateToken, authorizeAdmin, (req,res)=>unbanUser(req,res));
 route.get('/:id/booking', authenticateToken, (req,res)=>getBookingbyUser(req,res));
 route.get('/:id/tickets', authenticateToken, (req,res)=>getTicketsByuser(req,res));
-route.get('/:id/notification', authenticateToken, (req,res)=>getNotificationByUser(req,res));
+
 
 export {route}

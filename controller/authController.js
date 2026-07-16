@@ -67,7 +67,7 @@ export async function getMe(req, res) {
         const user = await getUserByid(req.user.userId);
         if (!user) return res.status(404).json({ error: "User not found" });
         
-        const { password, ...userData } = user;
+        const { password,googleRefreshToken,googleTokenExpiry, ...userData } = user;
         return res.json(userData);
     } catch (err) {
         console.error(err);

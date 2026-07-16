@@ -49,31 +49,9 @@ export const DigitalTicket = sequelize.define('DigitalTicket', {
   generatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
 }, { tableName: 'DIGITAL_TICKET', timestamps: false });
 
-export const Notification = sequelize.define('Notification', {
-  notificationId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  userId: { type: DataTypes.INTEGER, allowNull: false },
-  title: { type: DataTypes.STRING(150), allowNull: false },
-  message: { type: DataTypes.TEXT, allowNull: false },
-  type: { type: DataTypes.STRING(50), allowNull: false },
-  isRead: { type: DataTypes.BOOLEAN, defaultValue: false },
-  createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
-}, { tableName: 'NOTIFICATION', timestamps: false });
 
-export const ActivityLog = sequelize.define('ActivityLog', {
-  logId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  actorId: { type: DataTypes.INTEGER, allowNull: false },
-  action: { type: DataTypes.STRING(100), allowNull: false },
-  targetType: { type: DataTypes.STRING(50), allowNull: false },
-  targetId: { type: DataTypes.INTEGER, allowNull: false },
-  description: { type: DataTypes.TEXT, allowNull: true },
-  createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
-}, { tableName: 'ACTIVITY_LOG', timestamps: false });
 
-export const Administrator = sequelize.define('Administrator', {
-  adminId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  userId: { type: DataTypes.INTEGER, allowNull: false, unique: true },
-  permissionLevel: { type: DataTypes.STRING(50), defaultValue: 'standard' }
-}, { tableName: 'ADMINISTRATOR', timestamps: false });
+
 
 export const BanRecord = sequelize.define('BanRecord', {
   banId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -85,14 +63,7 @@ export const BanRecord = sequelize.define('BanRecord', {
   status: { type: DataTypes.ENUM('active', 'lifted', 'expired'), defaultValue: 'active' }
 }, { tableName: 'BAN_RECORD', timestamps: false });
 
-export const Feedback = sequelize.define('Feedback', {
-  feedbackId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  bookingId: { type: DataTypes.INTEGER, allowNull: false, unique: true },
-  userId: { type: DataTypes.INTEGER, allowNull: false },
-  rating: { type: DataTypes.TINYINT, allowNull: false },
-  comment: { type: DataTypes.TEXT, allowNull: true },
-  createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
-}, { tableName: 'FEEDBACK', timestamps: false });
+
 
 export const MaintenanceRequest = sequelize.define('MaintenanceRequest', {
   maintenanceId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -106,6 +77,7 @@ export const MaintenanceRequest = sequelize.define('MaintenanceRequest', {
 export const Schedule = sequelize.define('Schedule', {
   scheduleId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   roomId: { type: DataTypes.INTEGER, allowNull: false },
+  bookingId: { type: DataTypes.INTEGER, allowNull: true },
   title: { type: DataTypes.STRING(150), allowNull: false },
   startTime: { type: DataTypes.DATE, allowNull: false },
   endTime: { type: DataTypes.DATE, allowNull: false },
@@ -145,25 +117,15 @@ RoomImage.belongsTo(Room, { foreignKey: 'roomId' });
 Booking.hasOne(DigitalTicket, { foreignKey: 'bookingId' });
 DigitalTicket.belongsTo(Booking, { foreignKey: 'bookingId' });
 
-// User & Notification
-User.hasMany(Notification, { foreignKey: 'userId' });
-Notification.belongsTo(User, { foreignKey: 'userId' });
 
-// User & Administrator
-User.hasOne(Administrator, { foreignKey: 'userId' });
-Administrator.belongsTo(User, { foreignKey: 'userId' });
+
+
 
 // User & BanRecord
 User.hasMany(BanRecord, { foreignKey: 'userId' });
 BanRecord.belongsTo(User, { foreignKey: 'userId' });
 
-// User & Feedback
-User.hasMany(Feedback, { foreignKey: 'userId' });
-Feedback.belongsTo(User, { foreignKey: 'userId' });
 
-// Booking & Feedback
-Booking.hasOne(Feedback, { foreignKey: 'bookingId' });
-Feedback.belongsTo(Booking, { foreignKey: 'bookingId' });
 
 // User & MaintenanceRequest
 User.hasMany(MaintenanceRequest, { foreignKey: 'reportedBy' });
@@ -180,3 +142,7 @@ Schedule.belongsTo(Room, { foreignKey: 'roomId' });
 // User & CreditTransaction
 User.hasMany(CreditTransaction, { foreignKey: 'userId' });
 CreditTransaction.belongsTo(User, { foreignKey: 'userId' });
+
+// Booking & Schedule
+Booking.hasOne(Schedule, { foreignKey: 'bookingId' });
+Schedule.belongsTo(Booking, { foreignKey: 'bookingId' });

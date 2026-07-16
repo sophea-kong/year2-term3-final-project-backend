@@ -11,6 +11,7 @@ import {
 } from "../repositiory/bookingRepository.js";
 import { getUserByid } from "../repositiory/userrepository.js";
 import { addEventToGoogleCalendar } from "../utils/googleCalendarService.js";
+import { createScheduleRepo, updateScheduleByBookingIdRepo } from "../repositiory/scheduleRepository.js";
 
 function extractUserId(req) {
     return req.user?.user_id || req.user?.userId || req.user?.id || null;
@@ -44,6 +45,16 @@ export async function createNewBooking(req, res) {
             return res.status(400).json({ error: 'Missing required booking fields' });
         }
         const booking = await createBooking(payload);
+        
+        await createScheduleRepo({
+            roomId: booking.roomId,
+            bookingId: booking.bookingId,
+            title: booking.title,
+            startTime: booking.startTime,
+            endTime: booking.endTime,
+            type: 'pending'
+        });
+
         return res.status(201).json(booking);
     } catch (err) {
         console.error(err);
@@ -114,6 +125,8 @@ export async function approveBooking(req, res) {
             return res.status(403).json({ error: 'Forbidden' });
         }
         const updated = await setBookingStatus(booking_id, 'approved');
+        
+        await updateScheduleByBookingIdRepo(booking_id, { type: 'scheduled' });
         
         // Fetch booking owner profile to check Google Calendar link
         try {

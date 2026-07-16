@@ -35,6 +35,13 @@ export async function deleteScheduleRepo(id) {
     return affectedCount;
 }
 
+export async function updateScheduleByBookingIdRepo(bookingId, scheduleData) {
+    const [affectedCount] = await Schedule.update(scheduleData, {
+        where: { bookingId }
+    });
+    return affectedCount;
+}
+
 export async function checkConflictRepo(roomId, startTime, endTime, excludeScheduleId = null) {
     const start = new Date(startTime);
     const end = new Date(endTime);
