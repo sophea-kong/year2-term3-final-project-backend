@@ -65,9 +65,11 @@ export async function googleCallback(req,res){
 
         await User.update(updatePayload ,{where : {userId}});
 
-        return res.redirect('http://localhost:5173/profile?status=success');
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        return res.redirect(`${frontendUrl}/profile?status=success`);
     } catch (err){
       console.error("error exchanging code for tokens : ", err);
-        return res.redirect('http://localhost:5173/profile?status=error');
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        return res.redirect(`${frontendUrl}/profile?status=error`);
     }
 }

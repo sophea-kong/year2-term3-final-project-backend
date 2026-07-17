@@ -2207,3 +2207,5 @@
 [2026-07-17T02:38:22.531Z] [IP: ::ffff:127.0.0.1] GET /booking/172/ - 403 (20ms)
 [2026-07-17T02:43:11.666Z] [IP: ::ffff:127.0.0.1] GET /auth/login - 404 (4ms)
 [2026-07-17T02:43:14.772Z] [IP: ::ffff:127.0.0.1] POST /auth/login - 200 (135ms)
+[2026-07-17T03:23:19.005Z] [IP: ::1] GET /auth/google/callback?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoic29waGVhQGdtYWlsLmNvbSIsImlhdCI6MTc4NDI1ODU0NywiZXhwIjoxNzg0MjYyMTQ3fQ.gHxOgvEyF9GCEjAsxzto6lYyKnKdNfb0fAZrluKL--o&iss=https://accounts.google.com&code=4/0AXEQxIAeJhiQXIfGjJ9OPLBSCvzk-_WcWosXjAkXX8sRX0RBsqjdcVrJdCizbxZjcqpOQQ&scope=https://www.googleapis.com/auth/calendar.events - 302 (711ms)
+[2026-07-17T03:38:07.600Z] [IP: ::1] GET /auth/google/callback?state=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoic29waGVhQGdtYWlsLmNvbSIsImlhdCI6MTc4NDI1ODU0NywiZXhwIjoxNzg0MjYyMTQ3fQ.gHxOgvEyF9GCEjAsxzto6lYyKnKdNfb0fAZrluKL--o&iss=https://accounts.google.com&code=4/0AXEQxIBa0z7A7FXplHihfhPtnG40WWQm1r_kwMCSlj_15PXtjsddOW39-JRuhUkkbzQdig&scope=https://www.googleapis.com/auth/calendar.events - 302 (718ms)
