@@ -17,6 +17,7 @@ import chatRouter from './routes/chat.js';
 
 const app = express();
 
+
 app.use(logger);
 app.use(cors())
 app.get('/', (req, res) => {
@@ -38,8 +39,9 @@ app.use('/bans', banRoute);
 if (process.env.NODE_ENV !== 'test') {
     sequelize.sync();
     setupCronJobs();
-    app.listen(3000, () => {
-        console.log("listening on port 3000");
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`listening on port ${PORT}`);
     });
 }
 

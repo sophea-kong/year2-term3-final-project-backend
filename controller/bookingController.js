@@ -12,6 +12,7 @@ import {
 import { getUserByid } from "../repositiory/userrepository.js";
 import { addEventToGoogleCalendar } from "../utils/googleCalendarService.js";
 import { createScheduleRepo, updateScheduleByBookingIdRepo } from "../repositiory/scheduleRepository.js";
+import { createTicketRepo } from "../repositiory/ticketRepository.js";
 
 function extractUserId(req) {
     return req.user?.user_id || req.user?.userId || req.user?.id || null;
@@ -127,6 +128,13 @@ export async function approveBooking(req, res) {
         const updated = await setBookingStatus(booking_id, 'approved');
         
         await updateScheduleByBookingIdRepo(booking_id, { type: 'scheduled' });
+        
+        // Generate digital ticket
+        try {
+            await createTicketRepo(booking_id);
+        } catch (ticketErr) {
+            console.error("Failed to generate digital ticket:", ticketErr.message);
+        }
         
         // Fetch booking owner profile to check Google Calendar link
         try {

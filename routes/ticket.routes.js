@@ -19,6 +19,6 @@ ticketRoute.patch('/tickets/:ticketId/cancel', authenticateToken, authorizeAdmin
 ticketRoute.patch('/tickets/:ticketId/expire', authenticateToken, authorizeAdmin, expireTicket);
 
 // Bookings integration endpoint
-ticketRoute.get('/bookings/:bookingId/ticket', authenticateToken, getTicketByBookingId);
+ticketRoute.get('/booking/:bookingId/ticket', authenticateToken, getTicketByBookingId);
 
 export { ticketRoute };

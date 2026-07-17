@@ -1,3 +1,4 @@
+import { getBookingById } from "../repositiory/bookingRepository.js";
 import {
     getAllTicketsRepo,
     getTicketByIdRepo,
@@ -5,6 +6,7 @@ import {
     getTicketByCodeRepo,
     updateTicketStatusRepo
 } from "../repositiory/ticketRepository.js";
+import { getMe } from "./authController.js";
 
 export async function getAllTickets(req, res) {
     try {
@@ -23,6 +25,11 @@ export async function getTicketById(req, res) {
         if (!ticket) {
             return res.status(404).send({ error: "Ticket not found" });
         }
+
+        if (ticket.Booking && ticket.Booking.userId !== req.user.userId && req.user.role !== 'admin') {
+            return res.status(403).send({ error: "Access denied. You are not the owner of this ticket." });
+        }
+
         return res.send(ticket);
     } catch (err) {
         console.error(err);
@@ -37,6 +44,10 @@ export async function getTicketByBookingId(req, res) {
         if (!ticket) {
             return res.status(404).send({ error: "Ticket not found for this booking" });
         }
+        if (ticket.Booking && ticket.Booking.userId !== req.user.userId && req.user.role !== 'admin') {
+            return res.status(403).send({ error: "Access denied. You are not the owner of this ticket." });
+        }
+
         return res.send(ticket);
     } catch (err) {
         console.error(err);
