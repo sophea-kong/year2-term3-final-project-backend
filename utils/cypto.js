@@ -2,7 +2,8 @@ import crypto from 'crypto'
 
 
 const ALGORITHM = "aes-256-gcm";
-const rawKey = Buffer.from(process.env.ENCRYPTION_KEY, 'hex');
+const encryptionKey = process.env.ENCRYPTION_KEY || '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
+const rawKey = Buffer.from(encryptionKey, 'hex');
 const KEY = rawKey.length > 32 ? rawKey.subarray(0, 32) : rawKey;
 
 export function encrypt(text){

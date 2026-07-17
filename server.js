@@ -37,7 +37,7 @@ app.use('/maintenance', maintenanceRoute);
 app.use('/bans', banRoute);
 
 if (process.env.NODE_ENV !== 'test') {
-    sequelize.sync();
+    sequelize.sync({ alter: true });
     setupCronJobs();
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
