@@ -8,8 +8,8 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1h";
 
 export async function register(req, res) {
     try {
-        const { fullname, email, password } = req.body;
-        if (!fullname || !email || !password) {
+        const { fullName, email, password } = req.body;
+        if (!fullName || !email || !password) {
             return res.status(400).json({ error: "Missing required fields" });
         }
         const existingUser = await getUserByEmailRepo(email);
@@ -20,7 +20,7 @@ export async function register(req, res) {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         
-        const userId = await createUserRepo(fullname, email, hashedPassword);
+        const userId = await createUserRepo(fullName, email, hashedPassword);
         return res.status(201).json({ message: "User registered successfully", userId });
     } catch (err) {
         console.error(err);
